@@ -3,7 +3,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Project root directory (one level up from this config file)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Directory where all model weight files live
+MODELS_DIR = os.path.join(BASE_DIR, "models", "weights")
+
 class Settings:
+    BASE_DIR = BASE_DIR
 
     # =========================
     # CAMERA SETTINGS
@@ -18,19 +25,23 @@ class Settings:
     # =========================
     # MODEL PATHS
     # =========================
-    PEOPLE_MODEL = "yolov8n.pt"
-    WEAPON_MODEL = "weapon.pt"
-    GRU_MODEL = "best_gru_model.pth"
+    PEOPLE_MODEL = os.path.join(MODELS_DIR, "yolov8n.pt")
+    WEAPON_MODEL = os.path.join(MODELS_DIR, "weapon.pt")
+    GRU_MODEL    = os.path.join(MODELS_DIR, "best_gru_model.pth")
 
     # ML risk fusion model
-    RISK_MODEL = "risk_model.pkl"
+    RISK_MODEL   = os.path.join(MODELS_DIR, "risk_model.pkl")
 
 
     # =========================
-    # DETECTION CONFIDENCE
+    # DETECTION CONFIDENCE & THRESHOLDS
     # =========================
     PERSON_CONF = 0.60
+    PERSON_PERSISTENCE_THRESHOLD = 2
+
     WEAPON_CONF = 0.75
+    WEAPON_ALERT_THRESHOLD = 0.55
+    WEAPON_AREA_MIN = 120
 
     # =========================
     # MULTI-RATE PIPELINE
@@ -106,7 +117,7 @@ class Settings:
     # LOGGING
     # =========================
     LOG_LEVEL = "INFO"
-    LOG_FILE = "logs/system.log"
+    LOG_FILE = os.path.join(BASE_DIR, "logs", "system.log")
 
 
     # =========================

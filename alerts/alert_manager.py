@@ -15,8 +15,10 @@ from pipeline import shared_state
 # =========================
 # LOG DIRECTORY
 # =========================
-os.makedirs("logs", exist_ok=True)
-os.makedirs("logs/snapshots", exist_ok=True)
+LOGS_DIR = os.path.join(settings.BASE_DIR, "logs")
+SNAPSHOTS_DIR = os.path.join(LOGS_DIR, "snapshots")
+os.makedirs(LOGS_DIR, exist_ok=True)
+os.makedirs(SNAPSHOTS_DIR, exist_ok=True)
 
 
 # =========================
@@ -26,7 +28,7 @@ logger = logging.getLogger("alert_logger")
 
 if not logger.handlers:
 
-    handler = logging.FileHandler("logs/alerts.log")
+    handler = logging.FileHandler(os.path.join(LOGS_DIR, "alerts.log"))
     formatter = logging.Formatter("%(asctime)s - %(message)s")
 
     handler.setFormatter(formatter)
@@ -132,7 +134,7 @@ def send_email_alert(alert_type, score, timestamp):
                 
                 # Save locally to logs/snapshots
                 snapshot_filename = f"snapshot_{timestamp.replace(' ', '_').replace(':', '-')}.jpg"
-                snapshot_path = os.path.join("logs/snapshots", snapshot_filename)
+                snapshot_path = os.path.join(SNAPSHOTS_DIR, snapshot_filename)
                 cv2.imwrite(snapshot_path, frame)
                 logger.info(f"Snapshot saved locally: {snapshot_path}")
 

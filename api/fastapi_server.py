@@ -223,7 +223,7 @@ def stop_system():
 @app.post("/upload_video")
 def upload_video(file: UploadFile = File(...)):
     # Save the file temporarily
-    upload_dir = "temp_uploads"
+    upload_dir = os.path.join(settings.BASE_DIR, "temp_uploads")
     os.makedirs(upload_dir, exist_ok=True)
     
     # Clean previous uploads to save space
@@ -249,7 +249,7 @@ def upload_video(file: UploadFile = File(...)):
 # =========================
 @app.get("/snapshots")
 def list_snapshots(username: str = Depends(authenticate)):
-    snapshot_dir = "logs/snapshots"
+    snapshot_dir = os.path.join(settings.BASE_DIR, "logs", "snapshots")
     if not os.path.exists(snapshot_dir):
         return {"snapshots": []}
     
@@ -259,7 +259,7 @@ def list_snapshots(username: str = Depends(authenticate)):
 
 @app.get("/snapshots/{filename}")
 def get_snapshot(filename: str, username: str = Depends(authenticate)):
-    file_path = os.path.join("logs/snapshots", filename)
+    file_path = os.path.join(settings.BASE_DIR, "logs", "snapshots", filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Snapshot not found")
     

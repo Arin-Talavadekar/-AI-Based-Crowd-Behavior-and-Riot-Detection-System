@@ -1,4 +1,4 @@
-# 👁️ Sightline Command Console
+# AI-Based Crowd Behavior and Riot Detection System
 
 **Cognitive Surveillance & Real-Time Threat Intelligence HUD**
 
@@ -9,7 +9,9 @@
 ![AI Framework](https://img.shields.io/badge/Core-YOLOv8--&--GRU-blue?style=for-the-badge)
 ![FPS](https://img.shields.io/badge/Performance-Sync--Free--30FPS-orange?style=for-the-badge)
 
-Sightline is a high-fidelity AI surveillance dashboard designed for mission-critical command centers. It features a modern bento-grid HUD, real-time spatial awareness, and a multi-rate asynchronous pipeline that delivers true real-time performance without UI lag.
+An AI-Based Crowd Behavior and Riot Detection System — a high-fidelity AI surveillance dashboard designed for mission-critical command centers. It features a modern bento-grid HUD, real-time spatial awareness, and a multi-rate asynchronous pipeline that delivers true real-time performance without UI lag.
+
+![Main Dashboard](assets/main_dashboard.png)
 
 ## 🚀 Key Features
 
@@ -22,7 +24,7 @@ Sightline is a high-fidelity AI surveillance dashboard designed for mission-crit
 
 ## 🏗️ System Architecture
 
-Sightline operates on a **Non-Blocking Multi-Rate Pipeline**:
+The system operates on a **Non-Blocking Multi-Rate Pipeline**:
 
 1.  **Frame Buffer (LIFO)**: Ensures the AI always sees the *latest* possible frame, eliminating the "lag backlog" found in traditional serial systems.
 2.  **Vector Tracking**: Propagates bounding boxes across frames using high-speed heuristics, keeping the UI smooth even during AI skip-frames.
@@ -33,8 +35,8 @@ Sightline operates on a **Non-Blocking Multi-Rate Pipeline**:
 ### 1. Environment Preparation
 ```bash
 # Clone the repository
-git clone https://github.com/[your-repo]/major.git
-cd major
+git clone https://github.com/[your-repo]/AI-Based-Crowd-Behavior-and-Riot-Detection-System.git
+cd AI-Based-Crowd-Behavior-and-Riot-Detection-System
 
 # Create virtual environment
 python -m venv venv
@@ -45,16 +47,34 @@ pip install -r requirements.txt
 ```
 
 ### 2. Model Configuration
-Ensure the following models are in the root directory:
+Ensure the following models are placed in the `models/weights/` directory:
 - `yolov8n.pt` (General detection)
 - `weapon.pt` (Tactical detection)
 - `best_gru_model.pth` (Behavior analytics)
+- `risk_model.pkl` (Machine Learning risk fusion)
 
-### 3. Launch Command
+### 3. Launch the Backend Engine & API
 ```bash
 python run_system.py
 ```
-*Access the console at: `http://localhost:3000`*
+*The backend API and AI engine will start on `http://localhost:8000`*
+
+### 4. Launch the Frontend Dashboard
+Open a new terminal, and run the following:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*Access the dashboard console at: `http://localhost:3000`*
+
+## 📸 System Screenshots
+
+### Normal Crowd Monitoring
+![Normal Behavior](assets/Normal.png)
+
+### Anomalous / Riot Behavior Detection
+![Anomalous Behavior](assets/Anamlous.png)
 
 ## ⚙️ Configuration
 Tweak `config/config.py` for your hardware environment:
@@ -65,4 +85,4 @@ Tweak `config/config.py` for your hardware environment:
 ---
 
 **Developed for Cognitive Security Systems**
-*Sightline OS V2.1 — Encrypted Link Established*
+*AI-Based Crowd Behavior and Riot Detection System V2.1 — Encrypted Link Established*

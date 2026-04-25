@@ -4,7 +4,7 @@ venv/
 
 # Media / Data
 temp_uploads/
-test_videos/
+
 
 # Python
 __pycache__/

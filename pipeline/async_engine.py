@@ -342,8 +342,8 @@ def weapon_worker():
 
             for box, score in zip(boxes, scores):
                 area = (box[2] - box[0]) * (box[3] - box[1])
-                # Restored area threshold to 120 to avoid tiny false positive shapes
-                if score >= settings.WEAPON_CONF and area > 120:
+                # Restored area threshold to avoid tiny false positive shapes
+                if score >= settings.WEAPON_CONF and area > settings.WEAPON_AREA_MIN:
                     current_weapon_boxes.append((tuple(map(int, box)), score))
                     max_weapon_conf = max(max_weapon_conf, score)
 
@@ -357,14 +357,13 @@ def weapon_worker():
             # ALERT LOGIC: Trigger alert only if smoothed signal is strong
             avg_weapon_conf = np.mean(list(weapon_confidence_history)) if len(weapon_confidence_history) > 0 else 0.0
             
-            ALERT_THRESHOLD = 0.55 # Raised threshold to reduce false weapon alerts
-            new_weapon_signal = 1 if avg_weapon_conf >= ALERT_THRESHOLD else 0
+            new_weapon_signal = 1 if avg_weapon_conf >= settings.WEAPON_ALERT_THRESHOLD else 0
             
             with weapon_signal_lock:
                 weapon_signal = new_weapon_signal
             
             if new_weapon_signal and len(weapon_confidence_history) >= 2:
-                if weapon_confidence_history[-1] >= ALERT_THRESHOLD:
+                if weapon_confidence_history[-1] >= settings.WEAPON_ALERT_THRESHOLD:
                     trigger_alert("Weapon detected", avg_weapon_conf)
 
     logger.info("Weapon worker shutdown")
@@ -375,9 +374,6 @@ def weapon_worker():
 # =========================
 def people_worker():
     global last_people_metadata, active_tracks
-    
-    # Lowered to 2 to minimize "ghost boxes" and eliminate bounding box lag
-    PERSISTENCE_THRESHOLD = 2 
     
     while not shutdown_event.is_set():
         try:
@@ -442,7 +438,7 @@ def people_worker():
         stale_pids = []
         
         for pid, data in active_tracks.items():
-            if data['unseen_count'] <= PERSISTENCE_THRESHOLD:
+            if data['unseen_count'] <= settings.PERSON_PERSISTENCE_THRESHOLD:
                 final_metadata.append((data['box'], data['is_anomalous'], pid))
             else:
                 stale_pids.append(pid)
